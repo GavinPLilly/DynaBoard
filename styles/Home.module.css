@@ -1,5 +1,42 @@
+
+
+.bgWrap {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  z-index: -1;
+}
+
+
+.topnav {
+  min-height: 3vh;
+  margin:0;
+  width: 100%;
+  background-color: rgb(143,146,150);
+  overflow: hidden;
+  text-align: right;
+  position: absolute;
+  border-bottom: 30px solid rgb(217,217,217);
+  /* border-color: black;  */
+ }
+
+ .topnavimg {
+  margin:0;
+  text-align: left;
+  /* border-color: black;  */
+ }
+
+ .topnavtext {
+  margin:0;
+  text-align: right;
+  /* border-color: black;  */
+ }
+
+
 .container {
-  padding: 0 2rem;
+  margin:0;
+  /* padding: 0 2rem; */
 }
 
 .main {
@@ -56,6 +93,10 @@
   font-size: 1.5rem;
 }
 
+.usecasebg{
+  background-color: #11293e;
+}
+
 .code {
   background: #fafafa;
   border-radius: 5px;
@@ -79,10 +120,11 @@
   text-align: left;
   color: inherit;
   text-decoration: none;
-  border: 1px solid #eaeaea;
+  border: 1px solid white;
   border-radius: 10px;
   transition: color 0.15s ease, border-color 0.15s ease;
   max-width: 300px;
+  background:rgb(36,36,36);
 }
 
 .card:hover,
@@ -118,7 +160,7 @@
 @media (prefers-color-scheme: dark) {
   .card,
   .footer {
-    border-color: #222;
+    border-color: white;
   }
   .code {
     background: #111;
@@ -127,3 +169,91 @@
     filter: invert(1);
   }
 }
+
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+}
+
+/* Control the left side */
+.left {
+  left: 0;
+  background-color: #111;
+  text-align: right;
+}
+
+/* Control the right side */
+.right {
+  right: 0;
+  /* background: red; */
+  background-color: red;
+  /* color: red; */
+  text-align: right;
+
+}
+
+/* If you want the content centered horizontally and vertically */
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.body {
+  color: white;
+  background-color: #11293e;
+} 
+
+.columnbig {
+  float: left;
+  width: 57%;
+  height: 800px;
+  text-align: left;
+  color: inherit;
+  padding-top: 175px;
+  /* text-decoration: none; */
+  border-right: 1px dotted rgb(143,146,150);
+  /* transition: color 0.15s ease, border-color 0.15s ease; */
+}
+
+.columnsmall {
+  float: left;
+  width: 43%;
+  padding: 15px;
+  border: px white;
+  padding-top: 75px;
+  
+}
+
+.rowsmall{
+  padding-top: 85px;
+  padding-bottom: 15px;
+  height:50%;
+  border-bottom: 1px dotted rgb(143,146,150);
+}
+.rowsmall2{
+  padding-top: 45px;
+
+  height:50%;
+}
+
+
+/* Clear floats after the columns */
+.row {
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+
+
+ 
