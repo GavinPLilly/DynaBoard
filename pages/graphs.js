@@ -6,6 +6,10 @@ const DynamicPlot = dynamic(import('./line'), {
     ssr: false
   })
   
+const DynamicPlot2 = dynamic(import('./bar'), {
+    ssr: false
+  })  
+  
   export default function Home() {
     return (
       <React.Fragment>
@@ -14,6 +18,7 @@ const DynamicPlot = dynamic(import('./line'), {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <DynamicPlot />
+        <DynamicPlot2 />
       </React.Fragment>
     )
   }
