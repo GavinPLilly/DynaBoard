@@ -1,7 +1,10 @@
 import React from "react";
-import Plot from 'react-plotly.js'
+import dynamic from 'next/dynamic'
+const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
+// import Plot from 'react-plotly.js'
 
 export default function line () {
+  return (
     <Plot
       data={[
         {
@@ -34,4 +37,5 @@ export default function line () {
       ]}
       layout={{yaxis: {title: {text: 'LMP'}}, xaxis: {title: {text: 'Time'}},width: 600, height: 600, title: '.Z.NORTH, LMP over Time'}}
     />
+  );
 }

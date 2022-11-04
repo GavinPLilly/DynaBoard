@@ -10,7 +10,7 @@ const BarGraph = dynamic(import('./bar'), {
   ssr: false
 })
 
-export default () => {
+export default function graph() {
   return (
     <React.Fragment>
       <Head>
@@ -20,5 +20,5 @@ export default () => {
       <LineGraph />
       <BarGraph />
     </React.Fragment>
-  )
+  );
 }
