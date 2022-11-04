@@ -1,7 +1,7 @@
 import React from "react";
 import Plot from 'react-plotly.js'
 
-export default () => (
+export default function line () {
     <Plot
       data={[
         {
@@ -34,4 +34,4 @@ export default () => (
       ]}
       layout={{yaxis: {title: {text: 'LMP'}}, xaxis: {title: {text: 'Time'}},width: 600, height: 600, title: '.Z.NORTH, LMP over Time'}}
     />
-)
+}
