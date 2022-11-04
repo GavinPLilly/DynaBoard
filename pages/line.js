@@ -35,7 +35,13 @@ export default function line () {
           }
         },
       ]}
-      layout={{yaxis: {title: {text: 'LMP'}}, xaxis: {title: {text: 'Time'}},width: 600, height: 600, title: '.Z.NORTH, LMP over Time'}}
+      layout={{yaxis: {title: {text: 'LMP'}}, xaxis: {title: {text: 'Time'}},width: 600, height: 600, title: '.Z.NORTH, LMP over Time', font: {
+        family: 'Courier New, monospace',
+        size: 16,
+        color: 'white'
+      }, paper_bgcolor: 'rgba(0,0,0,0)',
+      plot_bgcolor: 'rgba(0,0,0,0)'
+  }}
     />
   );
 }
