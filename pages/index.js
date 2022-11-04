@@ -29,12 +29,12 @@ export default function Home() {
 <p className={styles.description}>Choose one of the following:</p> 
 <div className={styles.grid}>
           <div className={styles.card}>
-            <h2><Link href="usecase1">Single Scenario &rarr; </Link></h2>
+            <h2><Link href="usecase2">Single Scenario &rarr; </Link></h2>
             <p>Obtain metrics for a single scenario.</p>
             </div>
 
           <div className={styles.card}>
-          <h2><Link href="usecase2">Multiple Scenarios &rarr; </Link></h2>
+          <h2><Link href="usecase1">Multiple Scenarios &rarr; </Link></h2>
             <p>Compare multiple scenarios against each other.</p>
           </div>
 </div>  
