@@ -1,7 +1,6 @@
 import React from "react";
 import dynamic from 'next/dynamic';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
-// import Plot from 'react-plotly.js'
 
 export default function bar () {
   return (
