@@ -13,6 +13,7 @@ import {Bar, Bubble} from 'react-chartjs-2';
   const LineGraph = dynamic(import('./line'), {ssr:false})
   const BarGraph = dynamic(import('./bar'), {ssr:false})
   const HeatMap = dynamic(import('./heat'), {ssr:false})
+  const ScatterPlot = dynamic(import('./scatterplot'), {ssr:false})
   const data1 = {
     labels: ['January'],
     datasets: [
@@ -61,11 +62,7 @@ export default function use2() {
     <HeatMap />
   </div>
   <div class = {styles.rowsmall2}>
-    <Bubble
-      data={data1}
-      width={400}
-      height={150}
-    />
+    <ScatterPlot />
   </div>
 </div>
 </div>
