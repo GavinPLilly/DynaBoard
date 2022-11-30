@@ -1,43 +1,55 @@
 import React from "react";
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
+import { useState, useEffect } from 'react';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
 export default function line () {
+  //fetch data from api and set to data
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetch('http://localhost:3000/api/GET/node-data')
+      .then(response => response.json())
+      .then(
+        data => setData(data));
+  }, []);
+  //create traces for each scenario
+  let traces = [];
+  let scenarios = [...new Set(data.map(item => item.scenario_id))];
+  scenarios.forEach(scenario => {
+    let scenarioData = data.filter(data => data.scenario_id == scenario);
+    let hours = [];
+    let averageLMPs = [];
+    scenarioData.forEach(data => {
+      if (!hours.includes(data.hour)) {
+        hours.push(data.hour);
+      }
+    });
+    hours.forEach(hour => {
+      let sum = 0;
+      let count = 0;
+      scenarioData.forEach(data => {
+        if (data.hour == hour) {
+          sum += data.lmp;
+          count++;
+        }
+      });
+      averageLMPs.push(sum / count);
+    });
+    traces.push({
+      x: hours,
+      y: averageLMPs,
+      type: 'line',
+      name: scenario
+    });
+  });
+  
   return (
     <Plot
-      data={[
-        {
-          x:  ['01', '02', '03', '04', '05', '06', '07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'],
-          y: [30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06, 30.06],
-          type: 'line',
-          name: 'Base Case',
-          line: {
-            color: 'red',
-          },
-        },
-        {
-          x:  ['01', '02', '03', '04', '05', '06', '07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'],
-          y: [30.06, 30.11, 30.16, 30.21, 30.26, 30.31, 30.36, 30.41, 30.46, 30.51, 30.56, 30.61, 30.66, 30.71, 30.76, 30.81, 30.86, 30.91, 30.96, 31.01, 31.06, 31.11, 31.16, 31.21],
-          type: 'line',
-          name: 'Case A',
-          line: {
-            color: 'blue',
-          }
-        },
-        {
-          x:  ['01', '02', '03', '04', '05', '06', '07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'],
-          y: [30.06, 30.01, 29.96, 29.91, 29.86, 29.81, 29.76, 29.71, 29.66, 29.61, 29.56, 29.51, 29.46, 29.41, 29.36, 29.31, 29.26, 29.21, 29.16, 29.11, 29.06, 29.01, 28.96, 28.91],
-          type: 'line',
-          name: 'Case B',
-          line: {
-            color: 'green',
-          }
-        },
-      ]}
-      layout={{yaxis: {title: {text: 'LMP'}}, xaxis: {title: {text: 'Time'}},width: 600, height: 600, title: '.Z.NORTH, LMP over Time', font: {
+      data={traces}
+      layout={{yaxis: {title: {text: 'LMP'}}, xaxis: {title: {text: 'Time'}},width: 600, height: 600, title: 'Average LMP over Time', font: {
         family: 'Courier New, monospace',
         size: 16,
-        color: 'white'
+        color: 'black'
       }, paper_bgcolor: 'rgba(0,0,0,0)',
       plot_bgcolor: 'rgba(0,0,0,0)'
   }}
