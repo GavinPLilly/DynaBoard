@@ -63,8 +63,9 @@ export default function bar() {
       <select onChange={e => setScenarioID(e.target.value)}>
         {scenarios.map(scenario => (
           <option value={scenario}>{scenario}</option>
-        ))}</select>
-
+        ))}
+      </select>
+  
       <Plot
         data={[
           {
