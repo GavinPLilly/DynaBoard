@@ -10,7 +10,6 @@ export default function bar() {
   const [scenarioData, setScenarioData] = useState([]);
   const [hours, setHours] = useState([]); //hours
   const [averageLMPs, setAverageLMPs] = useState([]); //average lmp for each hour
-
   const [scenarios, setScenarios] = useState([]);
 
 
@@ -22,11 +21,15 @@ export default function bar() {
         data => setData(data));
   }, []);
 
-  //when the page loads set scenarios to all unique scenario ids
+  //when the page loads get all data and put it into a set where each scenario is unique
   useEffect(() => {
-    setScenarios([...new Set(data.map(item => item.scenario_id))]);
+    let scenarioSet = new Set();
+    data.forEach(data => {
+      scenarioSet.add(data.scenario_id);
+    });
+    setScenarios(Array.from(scenarioSet));
   }, [data]);
-
+  
   //when input changes set filtered data to scenarioData and set x and y values
   useEffect(() => {
     setScenarioData(data.filter(data => data.scenario_id == scenarioID));
