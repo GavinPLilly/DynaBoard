@@ -159,7 +159,9 @@ export default function line () {
                 }
             },
             steps: sliderSteps
-        }]
+        }],
+        width: 700,
+        height: 600
     };
     return (
         <Plot
