@@ -78,7 +78,7 @@ export default function bar() {
           },
         ]}
         layout={{
-          yaxis: { range: [28, 30.06], title: { text: 'LMP' } }, xaxis: { title: { text: 'Time' } }, width: 600, height: 600, title: '.Z.NORTH, LMP over Time', font: {
+          yaxis: { range: [28, 30.06], title: { text: 'LMP' } }, xaxis: { title: { text: 'Time' } }, width: 700, height: 600, title: '.Z.NORTH, LMP over Time', font: {
             family: 'Courier New, monospace',
             size: 16,
             color: 'white'

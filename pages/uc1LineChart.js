@@ -76,7 +76,9 @@ export default function uc1line () {
         yaxis: {
             title: 'LMP ($/MWh)',
             showline: false,
-        }
+        },
+        width: 700,
+        height: 600
     };
     return (
         <Plot
