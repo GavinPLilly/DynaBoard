@@ -66,11 +66,25 @@ import { useState, useEffect } from 'react';
     })
   }
 
-const filter_data = (data) => {
-  
-}
 
 export default function use1() {
+  const filter_data = (node_data, data_category, scenario, node_names) => {
+    if(data_category == 0) {
+      set_filtered_data([]);
+      return;
+    }
+    const new_data = node_data.filter(e => {
+      return e.scenario_id == scenario && node_names.includes(e.pnode_name);
+    });
+    console.log('contains: ');
+    console.log(node_names.includes(".I.KENT    345 2"));
+    console.log('node_names: ');
+    console.log(node_names);
+    set_filtered_data(new_data);
+    console.log('filtered data: ');
+    console.log(filtered_data);
+  }
+
   const [data, setData] = useState([]);
   const [filtered_data, set_filtered_data] = useState([]);
   const [data_category, set_data_category] = useState(0);
@@ -78,12 +92,15 @@ export default function use1() {
   const [node_names, set_node_names] = useState([]);
   const handle_data_category_change = (selection) => {
     set_data_category(selection.value);
+    filter_data(data, data_category, scenario, node_names);
   }
   const handle_scenario_change = (selection) => {
     set_scenario(selection.value);
+    filter_data(data, data_category, scenario, node_names);
   }
   const handle_node_names_change = (selections) => {
     set_node_names(selections.map(e => e.value));
+    filter_data(data, data_category, scenario, node_names);
   }
   useEffect(() => {
     fetch('http://localhost:3000/api/GET/node-data')
