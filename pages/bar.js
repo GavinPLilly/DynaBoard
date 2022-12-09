@@ -3,17 +3,16 @@ import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
-export default function bar() {
+export default function bar({data}) {
 
   const [data, setData] = useState([]);
-  const [scenarioID, setScenarioID] = useState('1');
   const [scenarioData, setScenarioData] = useState([]);
-  const [hours, setHours] = useState([]); //hours
-  const [averageLMPs, setAverageLMPs] = useState([]); //average lmp for each hour
 
   const [scenarios, setScenarios] = useState([]);
 
+  setScenarios([...new Set(data.map(item => item.scenario_id))]);
 
+<<<<<<< Updated upstream
   //when page loads get all data
   useEffect(() => {
     fetch('http://localhost:3000/api/GET/node-data')
@@ -21,51 +20,37 @@ export default function bar() {
       .then(
         data => setData(data));
   }, []);
+=======
+  setScenarioData(data.filter(data => data.scenario_id == scenarios[0]));
+>>>>>>> Stashed changes
 
-  //when the page loads set scenarios to all unique scenario ids
-  useEffect(() => {
-    setScenarios([...new Set(data.map(item => item.scenario_id))]);
-  }, [data]);
+  let hours = [];
+  let averageLMPs = [];
 
-  //when input changes set filtered data to scenarioData and set x and y values
-  useEffect(() => {
-    setScenarioData(data.filter(data => data.scenario_id == scenarioID));
+  scenarioData.forEach(data => {
+    if (!hours.includes(data.hour)) {
+      hours.push(data.hour);
+    }
+  });
 
-    let hours = [];
-    let averageLMPs = [];
-
+  hours.forEach(hour => {
+    let sum = 0;
+    let count = 0;
     scenarioData.forEach(data => {
-      if (!hours.includes(data.hour)) {
-        hours.push(data.hour);
+      if (data.hour == hour) {
+        sum += data.lmp;
+        count++;
       }
     });
+    averageLMPs.push(sum / count);
+  });
 
-    hours.forEach(hour => {
-      let sum = 0;
-      let count = 0;
-      scenarioData.forEach(data => {
-        if (data.hour == hour) {
-          sum += data.lmp;
-          count++;
-        }
-      });
-      averageLMPs.push(sum / count);
-    });
-
-    setHours(hours);
-    setAverageLMPs(averageLMPs);
-
-  }, [scenarioID]);
+  setHours(hours);
+  setAverageLMPs(averageLMPs);
 
 
   return (
     <>
-      <select onChange={e => setScenarioID(e.target.value)}>
-        {scenarios.map(scenario => (
-          <option value={scenario}>{scenario}</option>
-        ))}
-      </select>
-  
       <Plot
         data={[
           {

@@ -2,6 +2,7 @@ import React from "react";
 import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
+<<<<<<< Updated upstream
 //function to create line chart for single scenario takes in scenario id as parameter
 export default function uc1line ( {scenario} ) {
     //fetch data from api and set to data
@@ -38,6 +39,23 @@ export default function uc1line ( {scenario} ) {
         //store lmps for that date and hour
         let lmp = [];
         //for each node
+=======
+//takes in data as a parameter
+export default function uc1line ({data}) {
+    //store all scenarios
+    let scenarios = [...new Set(data.map(item => item.scenario_id))];
+    //for each scenario **TO REMOVE SINCE ONLY ONE SCENARIO DATA WILL BE GIVEN**
+    scenarios.forEach(scenario => {
+        //get data for that scenario
+        let scenarioData = data.filter(data => data.scenario_id == scenario);
+        //store dates
+        let dates = [];
+        //store hours
+        let hours = [];
+        //store lmps for each date
+        let lmps = [];
+        //add each date and hour to datesAndHours for x axis
+>>>>>>> Stashed changes
         scenarioData.forEach(data => {
             //if the node has data for that date and hour
             if (data.date + " " + data.hour == dateAndHour) {

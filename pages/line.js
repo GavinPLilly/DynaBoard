@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
+<<<<<<< Updated upstream
 export default function line () {
   //fetch data from api and set to data
   const [data, setData] = useState([]);
@@ -12,6 +13,9 @@ export default function line () {
       .then(
         data => setData(data));
   }, []);
+=======
+export default function line ({data}) {
+>>>>>>> Stashed changes
   //create traces for each scenario
   let traces = [];
   let scenarios = [...new Set(data.map(item => item.scenario_id))];
