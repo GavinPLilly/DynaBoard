@@ -88,14 +88,6 @@ export default function use1() {
     if(node_names.length == 0) {
       node_names = [...new Set(node_data.map(item => item.pnode_name))];
     }
-    //if data category is 0, consider the first category
-    if(data_category == 0) {
-      data_category = 'LMP';
-    }
-    //if scenario is 0, consider the first scenario
-    if(scenario == 0) {
-      scenario = 1;
-    }
     const new_data = node_data.filter(e => {
       return e.scenario_id == scenario && node_names.includes(e.pnode_name);
     });
@@ -119,7 +111,7 @@ export default function use1() {
   const [all_data, set_all_data] = useState([]);
   const [filtered_data, set_filtered_data] = useState([]);
   const [data_category, set_data_category] = useState(0);
-  const [scenario, set_scenario] = useState(0);
+  const [scenario, set_scenario] = useState(1);
   const [node_names, set_node_names] = useState([]);
   const handle_data_category_change = (selection) => {
     set_data_category(selection.value);
@@ -177,7 +169,6 @@ export default function use1() {
 
         onChange={handle_data_category_change}
         options={data_categories}
-        defaultValue={data_categories[0]}
         theme={(theme) => {
           // console.log(theme)
           return {
@@ -201,7 +192,7 @@ export default function use1() {
 Node Name: <Select     //creates singular dropdown component (insert wherever u want it )
       styles={customStyles}
   
-      isMulti="true"
+      isMulti={true}
       autosize={false}
 
         onChange={handle_node_names_change}
@@ -242,7 +233,6 @@ Node Name: <Select     //creates singular dropdown component (insert wherever u 
 
         onChange={handle_scenario_change}
         options={scenario_ids}
-        defaultValue={scenario_ids[0]}
         theme={(theme) => {
           // console.log(theme)
           return {

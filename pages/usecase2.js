@@ -194,7 +194,7 @@ Node Name: <Select     //creates singular dropdown component (insert wherever u 
       }
       />
       <br/>
-          <LineGraph data={filtered_data}/>
+          <LineGraph data={all_data}/>
         </div>
         <div className ={styles.firstcolumn}>
        Scenario ID: <Select     //creates singular dropdown component (insert wherever u want it )
@@ -226,7 +226,7 @@ Node Name: <Select     //creates singular dropdown component (insert wherever u 
 
             <br/>
 
-          <ScatterPlot data={filtered_data}/>
+          <ScatterPlot data={all_data}/>
         </div>
       </div>
     </div>
