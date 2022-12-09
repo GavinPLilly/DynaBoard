@@ -4,16 +4,7 @@ import { useState, useEffect } from 'react';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
 //function to create a mean absolute percentage error bar chart from data
-export default function MAPEBar () {
-    //fetch node-data from api
-    const [data, setData] = useState([]);
-    useEffect(() => {
-        fetch('http://localhost:3000/api/GET/node-data')
-            .then(res => res.json())
-            .then(data => {
-                setData(data);
-            });
-    }, []);
+export default function MAPEBar ({data}) {
     //calculate average LMPs for each scenario
     let scenarios = [...new Set(data.map(item => item.scenario_id))];
     let lmps = [];

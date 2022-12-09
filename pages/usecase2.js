@@ -6,6 +6,8 @@ import Select from 'react-select';
 import { useState, useEffect } from 'react';
 const LineGraph = dynamic(import('./line'), {ssr:false})
 const ScatterPlot = dynamic(import('./scatterplot'), {ssr:false})
+const MAPEBar = dynamic(import('./MAPEBar'), {ssr:false})
+const dualHistogram = dynamic(import('./dual-hist'), {ssr:false})
 
 const customStyles = { //only declare this once this is just to give the styles to the select component 
   menu: base => ({
@@ -79,8 +81,11 @@ export default function use2() {
       set_filtered_data([]);
       return;
     }
+    if (node_names.length == 0) {
+      node_names = [...new Set(node_data.map(item => item.pnode_name))];
+    }
     const new_data = node_data.filter(e => {
-      return e.scenario_id == scenario && node_names.includes(e.pnode_name);
+      return node_names.includes(e.pnode_name);
     });
     set_filtered_data(new_data);
     // console.log('contains: ');
@@ -194,7 +199,7 @@ Node Name: <Select     //creates singular dropdown component (insert wherever u 
       }
       />
       <br/>
-          <LineGraph data={all_data}/>
+          <LineGraph data = {filtered_data}/>
         </div>
         <div className ={styles.firstcolumn}>
        Scenario ID: <Select     //creates singular dropdown component (insert wherever u want it )
@@ -226,7 +231,7 @@ Node Name: <Select     //creates singular dropdown component (insert wherever u 
 
             <br/>
 
-          <ScatterPlot data={all_data}/>
+          <ScatterPlot data={filtered_data}/>
         </div>
       </div>
     </div>

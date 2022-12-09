@@ -4,17 +4,7 @@ import { useState, useEffect } from 'react';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
 //takes in data as a parameter and returns two density histograms as subplots
-export default function dualHist () {
-    //fetch node data from api
-    const [data, setData] = useState([]);
-    useEffect(() => {
-        fetch('http://localhost:3000/api/GET/node-data')
-            .then(response => response.json())
-            .then(data => {
-                setData(data);
-            });
-    }
-    , []);
+export default function dualHist ({data}) {
     //create density histograms for each scenario
     let scenarios = [...new Set(data.map(item => item.scenario_id))];
     let lmps = [];
