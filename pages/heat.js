@@ -42,7 +42,7 @@ var data = [{
 var layout = {
     yaxis: {title: {text: 'HE'}, ticks: '', side: 'top'}, 
     xaxis: {title: {text: 'Month'}, ticks: '', ticksuffix: ' '},
-    width: 700, 
+    width: 600, 
     height: 600, 
     title: 'Heat Map Example',
     annotations: []

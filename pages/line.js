@@ -3,15 +3,7 @@ import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
-export default function line () {
-  //fetch data from api and set to data
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    fetch('/api/GET/node-data')
-      .then(response => response.json())
-      .then(
-        data => setData(data));
-  }, []);
+export default function line ({data}) {
   //create traces for each scenario
   let traces = [];
   let scenarios = [...new Set(data.map(item => item.scenario_id))];
@@ -46,7 +38,7 @@ export default function line () {
   return (
     <Plot
       data={traces}
-      layout={{yaxis: {title: {text: 'LMP'}}, xaxis: {title: {text: 'Time'}},width: 600, height: 700, title: 'Average LMP over Time', font: {
+      layout={{yaxis: {title: {text: 'LMP'}}, xaxis: {title: {text: 'Time'}},width: 600, height: 600, title: 'Average LMP over Time', font: {
         family: 'Courier New, monospace',
         size: 16,
         color: 'black'

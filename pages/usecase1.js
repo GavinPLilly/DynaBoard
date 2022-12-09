@@ -76,37 +76,37 @@ export default function use1() {
     const new_data = node_data.filter(e => {
       return e.scenario_id == scenario && node_names.includes(e.pnode_name);
     });
-    console.log('contains: ');
-    console.log(node_names.includes(".I.KENT    345 2"));
-    console.log('node_names: ');
-    console.log(node_names);
     set_filtered_data(new_data);
-    console.log('filtered data: ');
-    console.log(filtered_data);
+    // console.log('contains: ');
+    // console.log(node_names.includes(".I.KENT    345 2"));
+    // console.log('node_names: ');
+    // console.log(node_names);
+    // console.log('filtered data: ');
+    // console.log(filtered_data);
   }
 
-  const [data, setData] = useState([]);
+  const [all_data, set_all_data] = useState([]);
   const [filtered_data, set_filtered_data] = useState([]);
   const [data_category, set_data_category] = useState(0);
   const [scenario, set_scenario] = useState(0);
   const [node_names, set_node_names] = useState([]);
   const handle_data_category_change = (selection) => {
     set_data_category(selection.value);
-    filter_data(data, data_category, scenario, node_names);
+    filter_data(all_data, data_category, scenario, node_names);
   }
   const handle_scenario_change = (selection) => {
     set_scenario(selection.value);
-    filter_data(data, data_category, scenario, node_names);
+    filter_data(all_data, data_category, scenario, node_names);
   }
   const handle_node_names_change = (selections) => {
     set_node_names(selections.map(e => e.value));
-    filter_data(data, data_category, scenario, node_names);
+    filter_data(all_data, data_category, scenario, node_names);
   }
   useEffect(() => {
     fetch('http://localhost:3000/api/GET/node-data')
       .then(response => response.json())
       .then(
-        data => setData(data));
+        all_data => set_all_data(all_data));
   }, []);
   // console.log('got data: ');
   // console.log(data);
@@ -119,7 +119,7 @@ export default function use1() {
 	  { label: '2', value: 2 },
 	  { label: '3', value: 3 }
   ]
-  let pnode_names = [...new Set(data.map(item => item.pnode_name))];
+  let pnode_names = [...new Set(all_data.map(item => item.pnode_name))];
   // console.log('pnode_names: ');
   // console.log(pnode_names);
   return (
@@ -197,7 +197,7 @@ Node Name: <Select     //creates singular dropdown component (insert wherever u 
 
 
 
-          <BarGraph />
+          <BarGraph data={filtered_data}/>
         </div>
         <div className ={styles.firstcolumn}>
        Scenario ID: <Select     //creates singular dropdown component (insert wherever u want it )
@@ -227,7 +227,7 @@ Node Name: <Select     //creates singular dropdown component (insert wherever u 
       }
       />
     <br/>
-          <SingleScenarioLineGraph />
+          <SingleScenarioLineGraph data={filtered_data}/>
         </div>
         <div className ={styles.column2}>
           <HeatMap />
