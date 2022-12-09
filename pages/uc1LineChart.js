@@ -2,8 +2,8 @@ import React from "react";
 import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
-
-export default function uc1line () {
+//function to create line chart for single scenario takes in scenario id as parameter
+export default function uc1line ( {scenario} ) {
     //fetch data from api and set to data
     const [data, setData] = useState([]);
     useEffect(() => {
@@ -19,46 +19,43 @@ export default function uc1line () {
     let datesAndHours = [];
     //store all scenarios
     let scenarios = [...new Set(data.map(item => item.scenario_id))];
-    //for each scenario
-    scenarios.forEach(scenario => {
-        //get data for that scenario
-        let scenarioData = data.filter(data => data.scenario_id == scenario);
-        //store dates
-        let dates = [];
-        //store hours
-        let hours = [];
-        //store lmps for each date
-        let lmps = [];
-        //add each date and hour to datesAndHours for x axis
+    //get data for that scenario
+    let scenarioData = data.filter(data => data.scenario_id == scenario);
+    //store dates
+    let dates = [];
+    //store hours
+    let hours = [];
+    //store lmps for each date
+    let lmps = [];
+    //add each date and hour to datesAndHours for x axis
+    scenarioData.forEach(data => {
+        if (!datesAndHours.includes(data.date + " " + data.hour)) {
+            datesAndHours.push(data.date + " " + data.hour);
+        }
+    });
+    //for each date and hour
+    datesAndHours.forEach(dateAndHour => {
+        //store lmps for that date and hour
+        let lmp = [];
+        //for each node
         scenarioData.forEach(data => {
-            if (!datesAndHours.includes(data.date + " " + data.hour)) {
-                datesAndHours.push(data.date + " " + data.hour);
+            //if the node has data for that date and hour
+            if (data.date + " " + data.hour == dateAndHour) {
+                //add the lmp to the lmp array
+                lmp.push(data.lmp);
             }
         });
-        //for each date and hour
-        datesAndHours.forEach(dateAndHour => {
-            //store lmps for that date and hour
-            let lmp = [];
-            //for each node
-            scenarioData.forEach(data => {
-                //if the node has data for that date and hour
-                if (data.date + " " + data.hour == dateAndHour) {
-                    //add the lmp to the lmp array
-                    lmp.push(data.lmp);
-                }
-            });
-            //add the average of lmp array to the lmps array
-            lmps.push(lmp.reduce((a, b) => a + b, 0) / lmp.length);
-        });
-        //add the lmps array to the scenarioLMPs array
-        scenarioLMPs.push(lmps);
+        //add the average of lmp array to the lmps array
+        lmps.push(lmp.reduce((a, b) => a + b, 0) / lmp.length);
     });
+    //add the lmps array to the scenarioLMPs array
+    scenarioLMPs.push(lmps);
     console.log(scenarioLMPs);
     //create trace for scenario 1 with datesAndHours as x and scenarioLMPs as y values
     let trace1 = {
         x: datesAndHours,
         //store y values scenario 1 for each date and hour as int
-        y: scenarioLMPs[0],
+        y: lmps,
         type: 'scatter',
         mode: 'lines+markers',
         marker: {color: 'red'},
@@ -76,7 +73,9 @@ export default function uc1line () {
         yaxis: {
             title: 'LMP ($/MWh)',
             showline: false,
-        }
+        },
+        width: 700,
+        height: 600
     };
     return (
         <Plot
