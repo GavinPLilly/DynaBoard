@@ -3,7 +3,7 @@ import styles from '../styles/Home.module.css'
 import dynamic from 'next/dynamic';
 import React from 'react';
 import Select from 'react-select';
-
+import { useState, useEffect } from 'react';
 
   const BarGraph = dynamic(import('./bar'), {ssr:false})
   const HeatMap = dynamic(import('./heat'), {ssr:false})
@@ -65,23 +65,46 @@ import Select from 'react-select';
   
     })
   }
-  const aquaticCreatures = [ //whatever list ex. list of countries
-    { label: 'a', value: 'a' },
-    { label: 'b', value: 'bn' },
-    { label: 'c', value: 'c' },
-    { label: 'd', value: 'd' },
-    { label: 'e', value: 'e' },
-    { label: 'f', value: 'f' },
-  ];
-  const data_categories = [
-	  { label: 'LMP' }
-  ];
-  const scenario_ids = [
-	  { label: '1' },
-	  { label: '2' },
-	  { label: '3' }
-  ]
+
+const filter_data = (data) => {
+  
+}
+
 export default function use1() {
+  const [data, setData] = useState([]);
+  const [filtered_data, set_filtered_data] = useState([]);
+  const [data_category, set_data_category] = useState(0);
+  const [scenario, set_scenario] = useState(0);
+  const [node_names, set_node_names] = useState([]);
+  const handle_data_category_change = (selection) => {
+    set_data_category(selection.value);
+  }
+  const handle_scenario_change = (selection) => {
+    set_scenario(selection.value);
+  }
+  const handle_node_names_change = (selections) => {
+    set_node_names(selections.map(e => e.value));
+  }
+  useEffect(() => {
+    fetch('http://localhost:3000/api/GET/node-data')
+      .then(response => response.json())
+      .then(
+        data => setData(data));
+  }, []);
+  // console.log('got data: ');
+  // console.log(data);
+  const data_categories = [
+    { label: 'LMP', value: 1}
+  ];
+  // let scenario_ids = [...new Set(data.map(item => item.scenario_id))];
+  const scenario_ids = [
+	  { label: '1', value: 1 },
+	  { label: '2', value: 2 },
+	  { label: '3', value: 3 }
+  ]
+  let pnode_names = [...new Set(data.map(item => item.pnode_name))];
+  // console.log('pnode_names: ');
+  // console.log(pnode_names);
   return (
     <div>
       <div className={styles.topnav}>
@@ -102,9 +125,10 @@ export default function use1() {
       isMulti={false}
       autosize={false}
 
+        onChange={handle_data_category_change}
         options={data_categories}
         theme={(theme) => {
-          console.log(theme)
+          // console.log(theme)
           return {
           ...theme,
           borderRadius: 0,
@@ -129,9 +153,13 @@ Node Name: <Select     //creates singular dropdown component (insert wherever u 
       isMulti="true"
       autosize={false}
 
-        options={aquaticCreatures}
+        onChange={handle_node_names_change}
+        options = {pnode_names.map(pnode_name => (
+            { label: pnode_name, value: pnode_name }
+          ))
+        }
         theme={(theme) => {
-          console.log(theme)
+          // console.log(theme)
           return {
           ...theme,
           borderRadius: 0,
@@ -152,7 +180,6 @@ Node Name: <Select     //creates singular dropdown component (insert wherever u 
 
 
 
-
           <BarGraph />
         </div>
         <div className ={styles.firstcolumn}>
@@ -162,9 +189,10 @@ Node Name: <Select     //creates singular dropdown component (insert wherever u 
       isMulti={false}
       autosize={false}
 
+        onChange={handle_scenario_change}
         options={scenario_ids}
         theme={(theme) => {
-          console.log(theme)
+          // console.log(theme)
           return {
           ...theme,
           borderRadius: 0,
