@@ -3,69 +3,35 @@ import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
-export default function bar() {
+export default function bar({data}) {
 
-  const [data, setData] = useState([]);
-  const [scenarioID, setScenarioID] = useState('1');
-  const [scenarioData, setScenarioData] = useState([]);
-  const [hours, setHours] = useState([]); //hours
-  const [averageLMPs, setAverageLMPs] = useState([]); //average lmp for each hour
+  let hours = [];
+  let averageLMPs = [];
 
-  const [scenarios, setScenarios] = useState([]);
+  data.forEach(data => {
+    if (!hours.includes(data.hour)) {
+      hours.push(data.hour);
+    }
+  });
 
-
-  //when page loads get all data
-  useEffect(() => {
-    fetch('/api/GET/node-data')
-      .then(response => response.json())
-      .then(
-        data => setData(data));
-  }, []);
-
-  //when the page loads set scenarios to all unique scenario ids
-  useEffect(() => {
-    setScenarios([...new Set(data.map(item => item.scenario_id))]);
-  }, [data]);
-
-  //when input changes set filtered data to scenarioData and set x and y values
-  useEffect(() => {
-    setScenarioData(data.filter(data => data.scenario_id == scenarioID));
-
-    let hours = [];
-    let averageLMPs = [];
-
-    scenarioData.forEach(data => {
-      if (!hours.includes(data.hour)) {
-        hours.push(data.hour);
+  hours.forEach(hour => {
+    let sum = 0;
+    let count = 0;
+    data.forEach(data => {
+      if (data.hour == hour) {
+        sum += data.lmp;
+        count++;
       }
     });
+    averageLMPs.push(sum / count);
+  });
 
-    hours.forEach(hour => {
-      let sum = 0;
-      let count = 0;
-      scenarioData.forEach(data => {
-        if (data.hour == hour) {
-          sum += data.lmp;
-          count++;
-        }
-      });
-      averageLMPs.push(sum / count);
-    });
-
-    setHours(hours);
-    setAverageLMPs(averageLMPs);
-
-  }, [scenarioID]);
+  //setHours(hours);
+  //setAverageLMPs(averageLMPs);
 
 
   return (
     <>
-      <select onChange={e => setScenarioID(e.target.value)}>
-        {scenarios.map(scenario => (
-          <option value={scenario}>{scenario}</option>
-        ))}
-      </select>
-  
       <Plot
         data={[
           {
@@ -78,7 +44,7 @@ export default function bar() {
           },
         ]}
         layout={{
-          yaxis: { range: [28, 30.06], title: { text: 'LMP' } }, xaxis: { title: { text: 'Time' } }, width: 700, height: 600, title: '.Z.NORTH, LMP over Time', font: {
+          yaxis: { range: [28, 30.06], title: { text: 'LMP' } }, xaxis: { title: { text: 'Time' } }, width: 600, height: 600, title: 'Average LMP over a 24hr period', font: {
             family: 'Courier New, monospace',
             size: 16,
             color: 'white'

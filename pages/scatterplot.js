@@ -3,15 +3,7 @@ import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
-export default function line () {
-    //fetch data from api and set to data
-    const [data, setData] = useState([]);
-    useEffect(() => {
-        fetch('/api/GET/node-data')
-            .then(response => response.json())
-            .then(
-                data => setData(data));
-    }, []);
+export default function line ({data}) {
     //store lmps of all nodes by hour for each scenario
     let scenarioLMPs = [];
     //store all scenarios
@@ -159,9 +151,7 @@ export default function line () {
                 }
             },
             steps: sliderSteps
-        }],
-        width: 700,
-        height: 600
+        }]
     };
     return (
         <Plot
