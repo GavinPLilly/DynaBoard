@@ -5,19 +5,10 @@ const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
 export default function bar({data}) {
 
-  const [data, setData] = useState([]);
-  const [scenarioData, setScenarioData] = useState([]);
-
-  const [scenarios, setScenarios] = useState([]);
-
-  setScenarios([...new Set(data.map(item => item.scenario_id))]);
-
-  setScenarioData(data.filter(data => data.scenario_id == scenarios[0]));
-
   let hours = [];
   let averageLMPs = [];
 
-  scenarioData.forEach(data => {
+  data.forEach(data => {
     if (!hours.includes(data.hour)) {
       hours.push(data.hour);
     }
@@ -26,7 +17,7 @@ export default function bar({data}) {
   hours.forEach(hour => {
     let sum = 0;
     let count = 0;
-    scenarioData.forEach(data => {
+    data.forEach(data => {
       if (data.hour == hour) {
         sum += data.lmp;
         count++;
@@ -35,8 +26,8 @@ export default function bar({data}) {
     averageLMPs.push(sum / count);
   });
 
-  setHours(hours);
-  setAverageLMPs(averageLMPs);
+  //setHours(hours);
+  //setAverageLMPs(averageLMPs);
 
 
   return (
@@ -53,7 +44,7 @@ export default function bar({data}) {
           },
         ]}
         layout={{
-          yaxis: { range: [28, 30.06], title: { text: 'LMP' } }, xaxis: { title: { text: 'Time' } }, width: 600, height: 600, title: '.Z.NORTH, LMP over Time', font: {
+          yaxis: { range: [28, 30.06], title: { text: 'LMP' } }, xaxis: { title: { text: 'Time' } }, width: 600, height: 600, title: 'Average LMP over a 24hr period', font: {
             family: 'Courier New, monospace',
             size: 16,
             color: 'white'
