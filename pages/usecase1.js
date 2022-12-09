@@ -73,6 +73,18 @@ export default function use1() {
       set_filtered_data([]);
       return;
     }
+    //if node_names is empty, consider all nodes
+    if(node_names.length == 0) {
+      node_names = [...new Set(node_data.map(item => item.pnode_name))];
+    }
+    //if data category is 0, consider the first category
+    if(data_category == 0) {
+      data_category = 'LMP';
+    }
+    //if scenario is 0, consider the first scenario
+    if(scenario == 0) {
+      scenario = 1;
+    }
     const new_data = node_data.filter(e => {
       return e.scenario_id == scenario && node_names.includes(e.pnode_name);
     });
@@ -144,6 +156,7 @@ export default function use1() {
 
         onChange={handle_data_category_change}
         options={data_categories}
+        defaultValue={data_categories[0]}
         theme={(theme) => {
           // console.log(theme)
           return {
@@ -208,6 +221,7 @@ Node Name: <Select     //creates singular dropdown component (insert wherever u 
 
         onChange={handle_scenario_change}
         options={scenario_ids}
+        defaultValue={scenario_ids[0]}
         theme={(theme) => {
           // console.log(theme)
           return {
