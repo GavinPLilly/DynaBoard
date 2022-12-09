@@ -73,6 +73,14 @@ import Select from 'react-select';
     { label: 'e', value: 'e' },
     { label: 'f', value: 'f' },
   ];
+  const data_categories = [
+	  { label: 'LMP' }
+  ];
+  const scenario_ids = [
+	  { label: '1' },
+	  { label: '2' },
+	  { label: '3' }
+  ]
 export default function use1() {
   return (
     <div>
@@ -91,10 +99,10 @@ export default function use1() {
       Data Category: <Select     //creates singular dropdown component (insert wherever u want it )
       styles={customStyles}
   
-      isMulti="true"
+      isMulti={false}
       autosize={false}
 
-        options={aquaticCreatures}
+        options={data_categories}
         theme={(theme) => {
           console.log(theme)
           return {
@@ -151,10 +159,10 @@ Node Name: <Select     //creates singular dropdown component (insert wherever u 
        Scenario ID: <Select     //creates singular dropdown component (insert wherever u want it )
       styles={customStyles}
   
-      isMulti="true"
+      isMulti={false}
       autosize={false}
 
-        options={aquaticCreatures}
+        options={scenario_ids}
         theme={(theme) => {
           console.log(theme)
           return {
