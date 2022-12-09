@@ -12,17 +12,7 @@ export default function bar({data}) {
 
   setScenarios([...new Set(data.map(item => item.scenario_id))]);
 
-<<<<<<< Updated upstream
-  //when page loads get all data
-  useEffect(() => {
-    fetch('http://localhost:3000/api/GET/node-data')
-      .then(response => response.json())
-      .then(
-        data => setData(data));
-  }, []);
-=======
   setScenarioData(data.filter(data => data.scenario_id == scenarios[0]));
->>>>>>> Stashed changes
 
   let hours = [];
   let averageLMPs = [];

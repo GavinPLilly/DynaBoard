@@ -3,19 +3,7 @@ import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
-<<<<<<< Updated upstream
-export default function line () {
-    //fetch data from api and set to data
-    const [data, setData] = useState([]);
-    useEffect(() => {
-        fetch('http://localhost:3000/api/GET/node-data')
-            .then(response => response.json())
-            .then(
-                data => setData(data));
-    }, []);
-=======
 export default function line ({data}) {
->>>>>>> Stashed changes
     //store lmps of all nodes by hour for each scenario
     let scenarioLMPs = [];
     //store all scenarios

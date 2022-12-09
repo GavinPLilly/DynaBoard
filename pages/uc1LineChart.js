@@ -2,44 +2,6 @@ import React from "react";
 import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
-<<<<<<< Updated upstream
-//function to create line chart for single scenario takes in scenario id as parameter
-export default function uc1line ( {scenario} ) {
-    //fetch data from api and set to data
-    const [data, setData] = useState([]);
-    useEffect(() => {
-        fetch('http://localhost:3000/api/GET/node-data')
-            .then(response => response.json())
-            .then(
-                data => setData(data));
-    }
-    , []);
-    //store lmps of all nodes by date and hour for each scenario
-    let scenarioLMPs = [];
-    //dates + hours for x axis
-    let datesAndHours = [];
-    //store all scenarios
-    let scenarios = [...new Set(data.map(item => item.scenario_id))];
-    //get data for that scenario
-    let scenarioData = data.filter(data => data.scenario_id == scenario);
-    //store dates
-    let dates = [];
-    //store hours
-    let hours = [];
-    //store lmps for each date
-    let lmps = [];
-    //add each date and hour to datesAndHours for x axis
-    scenarioData.forEach(data => {
-        if (!datesAndHours.includes(data.date + " " + data.hour)) {
-            datesAndHours.push(data.date + " " + data.hour);
-        }
-    });
-    //for each date and hour
-    datesAndHours.forEach(dateAndHour => {
-        //store lmps for that date and hour
-        let lmp = [];
-        //for each node
-=======
 //takes in data as a parameter
 export default function uc1line ({data}) {
     //store all scenarios
@@ -55,7 +17,6 @@ export default function uc1line ({data}) {
         //store lmps for each date
         let lmps = [];
         //add each date and hour to datesAndHours for x axis
->>>>>>> Stashed changes
         scenarioData.forEach(data => {
             //if the node has data for that date and hour
             if (data.date + " " + data.hour == dateAndHour) {
