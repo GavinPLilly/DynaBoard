@@ -66,6 +66,17 @@ import { useState, useEffect } from 'react';
     })
   }
 
+function median(arr) {
+  if (arr.length == 0) {
+    return 0;
+  }
+  arr.sort((a, b) => a.lmp - b.lmp); // 1.
+  const midpoint = Math.floor(arr.length / 2); // 2.
+  const median = arr.length % 2 === 1 ?
+    arr[midpoint].lmp : // 3.1. If odd length, just take midpoint
+    (arr[midpoint - 1].lmp + arr[midpoint].lmp) / 2; // 3.2. If even length, take median of midpoints
+  return median;
+}
 
 export default function use1() {
   const filter_data = (node_data, data_category, scenario, node_names) => {
@@ -89,12 +100,20 @@ export default function use1() {
       return e.scenario_id == scenario && node_names.includes(e.pnode_name);
     });
     set_filtered_data(new_data);
-    // console.log('contains: ');
-    // console.log(node_names.includes(".I.KENT    345 2"));
-    // console.log('node_names: ');
-    // console.log(node_names);
-    // console.log('filtered data: ');
-    // console.log(filtered_data);
+    const average = array => array.reduce((a, b) => a + b) / array.length;
+    if(filtered_data.length == 0) {
+      set_fdat_mean(0)
+      set_fdat_median(0)
+      set_fdat_max(0)
+      set_fdat_min(0)
+    }
+    else {
+      set_fdat_mean(filtered_data.reduce((a, b) => a + b.lmp, 0) / filtered_data.length);
+      set_fdat_median(median(new_data))
+      set_fdat_max(Math.max.apply(Math, filtered_data.map(e => e.lmp)));
+      set_fdat_min(Math.min.apply(Math, filtered_data.map(e => e.lmp)));
+      // set_fdat_min(filtered_data)
+    }
   }
 
   const [all_data, set_all_data] = useState([]);
@@ -132,8 +151,10 @@ export default function use1() {
 	  { label: '3', value: 3 }
   ]
   let pnode_names = [...new Set(all_data.map(item => item.pnode_name))];
-  // console.log('pnode_names: ');
-  // console.log(pnode_names);
+  const [fdat_mean, set_fdat_mean] = useState(0);
+  const [fdat_median, set_fdat_median] = useState(0);
+  const [fdat_max, set_fdat_max] = useState(0);
+  const [fdat_min, set_fdat_min] = useState(0);
   return (
     <div>
       <div className={styles.topnav}>
@@ -247,5 +268,11 @@ Node Name: <Select     //creates singular dropdown component (insert wherever u 
           <HeatMap />
         </div>
       </div>
+	<div>
+	  <h1>Mean: {fdat_mean}</h1>
+	  <h1>Median: {fdat_median}</h1>
+	  <h1>Min: {fdat_min}</h1>
+	  <h1>Max: {fdat_max}</h1>
+	</div>
     </div>
 )}
