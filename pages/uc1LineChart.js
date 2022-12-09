@@ -7,7 +7,7 @@ export default function uc1line () {
     //fetch data from api and set to data
     const [data, setData] = useState([]);
     useEffect(() => {
-        fetch('http://localhost:3000/api/GET/node-data')
+        fetch('/api/GET/node-data')
             .then(response => response.json())
             .then(
                 data => setData(data));
