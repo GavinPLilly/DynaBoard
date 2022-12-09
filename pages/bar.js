@@ -16,7 +16,7 @@ export default function bar() {
 
   //when page loads get all data
   useEffect(() => {
-    fetch('http://localhost:3000/api/GET/node-data')
+    fetch('/api/GET/node-data')
       .then(response => response.json())
       .then(
         data => setData(data));
