@@ -2,6 +2,7 @@ import React from 'react'
 import styles from '../styles/index.module.css'
 import Image from 'next/image'
 import Head from 'next/head'
+import Header from '../components/Header'
 
 function index() {
   return (
@@ -12,10 +13,7 @@ function index() {
       </Head>
 
       <div className={styles['container']}>
-        <div className={styles['header']}>
-          <Image src="/logo.svg" alt="logo" width={100} height={100} />
-          <p className={styles['header-description']}>Reliable Electricity | Competitive Prices | Clean-Energy Transition</p>
-        </div>
+        <Header />
         <div className={styles['body-container']}>
           <div className={styles['title']}>
             DynaBoard
