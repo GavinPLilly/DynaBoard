@@ -36,12 +36,12 @@ export default function uc1line ({data}) {
         type: 'scatter',
         mode: 'lines+markers',
         marker: {color: 'red'},
-        name: 'Scenario 1'
+        name: 'LMP over Time'
     };
     //plot trace1
     let plotData = [trace1];
     let layout = {
-        title: 'Scenario 1',
+        title: 'LMP over Time',
         xaxis: {
             title: 'Date and Hour',
             showgrid: false,
@@ -56,7 +56,7 @@ export default function uc1line ({data}) {
     };
     return (
         <Plot
-            data={plotData}
+            data={[trace1]}
             layout={layout}
         />
     );

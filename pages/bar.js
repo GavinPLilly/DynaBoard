@@ -7,7 +7,9 @@ export default function bar({data}) {
 
   let hours = [];
   let averageLMPs = [];
-
+  //log the scenario ids
+  let scenarios = [...new Set(data.map(item => item.scenario_id))];
+  console.log(scenarios);
   data.forEach(data => {
     if (!hours.includes(data.hour)) {
       hours.push(data.hour);
@@ -25,7 +27,10 @@ export default function bar({data}) {
     });
     averageLMPs.push(sum / count);
   });
-
+  //minimum lmp value
+  let min = Math.min(...averageLMPs);
+  //maximum lmp value
+  let max = Math.max(...averageLMPs);
   //setHours(hours);
   //setAverageLMPs(averageLMPs);
 
@@ -44,10 +49,12 @@ export default function bar({data}) {
           },
         ]}
         layout={{
-          yaxis: { range: [28, 30.06], title: { text: 'LMP' } }, xaxis: { title: { text: 'Time' } }, width: 600, height: 600, title: 'Average LMP over a 24hr period', font: {
+          yaxis: { title: { text: 'LMP' }, range: [min, max] }, 
+          xaxis: { title: { text: 'Time' } }, 
+          width: 600, height: 600, title: 'Average LMP over a 24hr period', font: {
             family: 'Courier New, monospace',
             size: 16,
-            color: 'white'
+            color: 'black'
           }, paper_bgcolor: 'rgba(0,0,0,0)',
           plot_bgcolor: 'rgba(0,0,0,0)'
         }}
