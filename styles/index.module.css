@@ -1,0 +1,50 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.25em;
+    margin-right: 1em;
+  }
+  .header-description {
+    text-align: center;
+  }
+  .title {
+    margin: 0;
+    line-height: 1.15;
+    font-size: 4rem;
+    text-align: center;
+    font-weight: 900;
+    margin-top: 1em;
+  }
+  .senarios-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  .senario {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 1em;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1em;
+  }
+  .senario:hover {
+    background-color: #f2f2f2;
+  }
+  .senario-title {
+    font-size: 1.5em;
+    font-weight: 900;
+    margin: 0;
+  }
+  .senario-description {
+    font-size: 1em;
+    margin: 0;
+    margin-top: 0.25em;
+  }

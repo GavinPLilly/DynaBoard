@@ -6,6 +6,16 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+.card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
 a {
   color: inherit;
   text-decoration: none;
