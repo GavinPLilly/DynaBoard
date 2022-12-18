@@ -200,6 +200,8 @@ Node Name: <Select     //creates singular dropdown component (insert wherever u 
       />
       <br/>
           <LineGraph data = {filtered_data}/>
+          <dualHistogram data={filtered_data}/>
+          <MAPEBar data = {filtered_data}/>
         </div>
         <div className ={styles.firstcolumn}>
        Scenario ID: <Select     //creates singular dropdown component (insert wherever u want it )
