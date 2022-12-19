@@ -146,17 +146,9 @@ export default function use2() {
   const [scenario2, set_scenario2] = useState(0);
   const [node_names2, set_node_names2] = useState([]);
 
-  const handle_data_category_change2 = (selection) => {
-    set_data_category2(selection.value);
-    filter_data(all_data, data_category, scenario, node_names);
-  }
   const handle_scenario_change2 = (selection) => {
     set_scenario2(selection.value);
-    filter_data(all_data, data_category, scenario, node_names);
-  }
-  const handle_node_names_change2 = (selections) => {
-    set_node_names2(selections.map(e => e.value));
-    filter_data2(all_data, data_category, scenario, node_names);
+    filter_data(all_data, data_category, scenario2, node_names);
   }
 
 
@@ -283,69 +275,8 @@ export default function use2() {
         </div>
       </div>
 
-      <div className={styles['step']}>2. Select Second Dataset</div>
+      <div className={styles['step']}>2. Select Second Scenario</div>
       <div className={styles['inputs']}>
-        <div>
-          Data Category: <Select     //creates singular dropdown component (insert wherever u want it )
-            styles={customStyles}
-
-            isMulti={false}
-            autosize={false}
-
-            onChange={handle_data_category_change2}
-            options={data_categories}
-            theme={(theme) => {
-              // console.log(theme)
-              return {
-                ...theme,
-                borderRadius: 0,
-                autosize: false,
-                colors: {
-                  ...theme.colors,
-                  text: '#3599B8',
-                  font: '#3599B8',
-                  primary25: '#3599B8',
-                  primary: '#3599B8',
-                  neutral80: 'black',
-                  color: 'black',
-                },
-              }
-            }
-            }
-          />
-        </div>
-        <div>
-          Node Name: <Select     //creates singular dropdown component (insert wherever u want it )
-            styles={customStyles}
-
-            isMulti="true"
-            autosize={false}
-
-            onChange={handle_node_names_change2}
-            options={pnode_names.map(pnode_name => (
-              { label: pnode_name, value: pnode_name }
-            ))
-            }
-            theme={(theme) => {
-              // console.log(theme)
-              return {
-                ...theme,
-                borderRadius: 0,
-                autosize: false,
-                colors: {
-                  ...theme.colors,
-                  text: '#3599B8',
-                  font: '#3599B8',
-                  primary25: '#3599B8',
-                  primary: '#3599B8',
-                  neutral80: 'black',
-                  color: 'black',
-                },
-              }
-            }
-            }
-          />
-        </div>
         <div>
           Scenario ID: <Select     //creates singular dropdown component (insert wherever u want it )
             styles={customStyles}
