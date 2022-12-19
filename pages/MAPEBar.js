@@ -17,6 +17,7 @@ export default function MAPEBar ({data}) {
                 dateAndHour.push(data.date + ' ' + data.hour);
             }
         });
+        dateAndHour.sort();
         dateAndHour.forEach(dateAndHour => {
             let sum = 0;
             let count = 0;

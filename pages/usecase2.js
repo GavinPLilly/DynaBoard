@@ -9,11 +9,11 @@ import Title from '../Components/Title';
 import Head from 'next/head';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+
 const LineGraph = dynamic(import('./line'), { ssr: false })
 const ScatterPlot = dynamic(import('./scatterplot'), { ssr: false })
 const MAPEBar = dynamic(import('./MAPEBar'), { ssr: false });
-
-// const dualHistogram = dynamic(import('./dual-hist'), { ssr: false })
+const DualHistogram = dynamic(import('./dual-hist'), { ssr: false })
 
 const customStyles = { //only declare this once this is just to give the styles to the select component 
   menu: base => ({
@@ -85,16 +85,13 @@ export default function use2() {
   const onDateChange = useCallback((date) => {
     setValue(date);
   }, []);
-  const filter_data = (node_data, data_category, scenario, node_names) => {
-    if (data_category == 0) {
-      set_filtered_data([]);
-      return;
-    }
+  const filter_data = (node_data, data_category, scenario1, scenario2, node_names) => {
+    
     if (node_names.length == 0) {
       node_names = [...new Set(node_data.map(item => item.pnode_name))];
     }
-    const new_data = node_data.filter(e => {
-      return node_names.includes(e.pnode_name);
+    let new_data = node_data.filter(e => {
+      return node_names.includes(e.pnode_name) && (e.scenario_id == scenario1 || e.scenario_id == scenario2);
     });
     set_filtered_data(new_data);
     // console.log('contains: ');
@@ -107,61 +104,6 @@ export default function use2() {
 
   const [all_data, set_all_data] = useState([]);
   const [filtered_data, set_filtered_data] = useState([]);
-  const [data_category, set_data_category] = useState(0);
-  const [scenario, set_scenario] = useState(0);
-  const [node_names, set_node_names] = useState([]);
-  const [selectedDate,setSelectedDate] = useState(null); //date
-  const [eselectedDate,esetSelectedDate] = useState(null); //date
-
-
-  const handle_data_category_change = (selection) => {
-    set_data_category(selection.value);
-    filter_data(all_data, data_category, scenario, node_names);
-  }
-  const handle_scenario_change = (selection) => {
-    set_scenario(selection.value);
-    filter_data(all_data, data_category, scenario, node_names);
-  }
-  const handle_node_names_change = (selections) => {
-    set_node_names(selections.map(e => e.value));
-    filter_data(all_data, data_category, scenario, node_names);
-  }
-  const handle_date_change = (date) => {
-    esetSelectedDate(date);
-    //believe you can obtain these with day = date.Day, date.Month,date.Year
-  }
-
-  /* Second Dataset */
-  const filter_data2 = (node_data, data_category, scenario, node_names) => {
-    if (data_category == 0) {
-      set_filtered_data2([]);
-      return;
-    }
-    if (node_names.length == 0) {
-      node_names = [...new Set(node_data.map(item => item.pnode_name))];
-    }
-    const new_data = node_data.filter(e => {
-      return node_names.includes(e.pnode_name);
-    });
-    set_filtered_data2(new_data);
-    // console.log('contains: ');
-    // console.log(node_names.includes(".I.KENT    345 2"));
-    // console.log('node_names: ');
-    // console.log(node_names);
-    // console.log('filtered data: ');
-    // console.log(filtered_data);
-  }
-
-  const [filtered_data2, set_filtered_data2] = useState([]);
-  const [data_category2, set_data_category2] = useState(0);
-  const [scenario2, set_scenario2] = useState(0);
-  const [node_names2, set_node_names2] = useState([]);
-
-  const handle_scenario_change2 = (selection) => {
-    set_scenario2(selection.value);
-    filter_data(all_data, data_category, scenario2, node_names);
-  }
-
 
   useEffect(() => {
     fetch('/api/GET/dummy-data')
@@ -169,8 +111,7 @@ export default function use2() {
       .then(
         all_data => set_all_data(all_data));
   }, []);
-  // console.log('got data: ');
-  // console.log(data);
+
   const data_categories = [
     { label: 'LMP', value: 1 }
   ];
@@ -182,6 +123,38 @@ export default function use2() {
   ]
   let pnode_names = [...new Set(all_data.map(item => item.pnode_name))];
 
+  const [data_category, set_data_category] = useState('LMP');
+  const [scenario, set_scenario] = useState(1);
+  const [node_names, set_node_names] = useState(pnode_names);
+  const [selectedDate,setSelectedDate] = useState(null); //date
+  const [eselectedDate,esetSelectedDate] = useState(null); //date
+  const [scenario2, set_scenario2] = useState(2);
+
+
+  const handle_data_category_change = (selection) => {
+    set_data_category(selection.value);
+    filter_data(all_data, data_category, scenario, scenario2, node_names);
+  }
+  const handle_scenario_change = (selection) => {
+    set_scenario(selection.value);
+    filter_data(all_data, data_category, scenario, scenario2, node_names);
+  }
+  const handle_node_names_change = (selections) => {
+    set_node_names(selections.map(e => e.value));
+    filter_data(all_data, data_category, scenario, scenario2, node_names);
+  }
+  const handle_date_change = (date) => {
+    esetSelectedDate(date);
+    //believe you can obtain these with day = date.Day, date.Month,date.Year
+  }
+  const handle_scenario_change2 = (selection) => {
+    set_scenario2(selection.value);
+    filter_data(all_data, data_category, scenario, scenario2, node_names);
+  }
+  console.log('filtered data: ');
+  console.log(filtered_data);
+  // console.log('got data: ');
+  // console.log(data);
   return (
     <div>
       <Head>
@@ -202,6 +175,34 @@ export default function use2() {
 
             onChange={handle_data_category_change}
             options={data_categories}
+            theme={(theme) => {
+              // console.log(theme)
+              return {
+                ...theme,
+                borderRadius: 0,
+                autosize: false,
+                colors: {
+                  ...theme.colors,
+                  text: '#3599B8',
+                  font: '#3599B8',
+                  primary25: '#3599B8',
+                  primary: '#3599B8',
+                  neutral80: 'black',
+                  color: 'black',
+                },
+              }
+            }
+            }
+          />
+        </div>
+        <div>
+          Node Name: <Select
+            styles={customStyles}
+            isMulti={true}
+            autosize={false}
+            onChange={handle_node_names_change}
+
+            options={pnode_names.map(e => { return { label: e, value: e } })}
             theme={(theme) => {
               // console.log(theme)
               return {
@@ -293,7 +294,7 @@ export default function use2() {
       <div className={styles['step']}>3. View Graphs & Statistics</div>
       <div className={styles['data']}>
         <LineGraph data={filtered_data} />
-        {/* <dualHistogram data={filtered_data} /> */}
+        <DualHistogram data={filtered_data} />
         <MAPEBar data={filtered_data} />
         <ScatterPlot data={filtered_data} />
       </div>
