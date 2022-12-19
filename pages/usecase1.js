@@ -130,7 +130,7 @@ export default function use1() {
     filter_data(all_data, data_category, scenario, node_names);
   }
   useEffect(() => {
-    fetch('http://localhost:3000/api/GET/node-data')
+    fetch('http://localhost:3000/api/GET/dummy-data')
       .then(response => response.json())
       .then(
         all_data => set_all_data(all_data));

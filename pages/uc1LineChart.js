@@ -13,6 +13,8 @@ export default function uc1line ({data}) {
             dateAndHour.push(data.date + ' ' + data.hour);
         }
     });
+    //sort datesAndHours
+    dateAndHour.sort();
     //for each date
     dateAndHour.forEach(date => {
         let lmp = [];
