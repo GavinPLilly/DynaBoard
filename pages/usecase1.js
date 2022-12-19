@@ -9,7 +9,7 @@ import Title from '../Components/Title';
 import Head from 'next/head';
 
 const BarGraph = dynamic(import('./bar'), { ssr: false })
-const HeatMap = dynamic(import('./heat'), { ssr: false })
+const HeatMap = dynamic(import('./uc1-heat'), { ssr: false })
 const SingleScenarioLineGraph = dynamic(import('./uc1LineChart'), { ssr: false })
 
 const customStyles = { //only declare this once this is just to give the styles to the select component 
@@ -265,7 +265,7 @@ export default function use1() {
       <div className={styles['data']}>
         <BarGraph data={filtered_data} />
         <SingleScenarioLineGraph data={filtered_data} data_category={'LMP'} />
-        <HeatMap />
+        <HeatMap heat_map_data={filtered_data}/>
         <div className={styles['stats']}>
           <h1>Mean: {Math.round(fdat_mean * 100) / 100}</h1>
           <h1>Median: {Math.round(fdat_median * 100) / 100}</h1>
