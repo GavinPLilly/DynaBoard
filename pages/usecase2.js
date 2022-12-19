@@ -121,22 +121,42 @@ export default function use2() {
   }
 
   /* Second Dataset */
+  const filter_data2 = (node_data, data_category, scenario, node_names) => {
+    if (data_category == 0) {
+      set_filtered_data2([]);
+      return;
+    }
+    if (node_names.length == 0) {
+      node_names = [...new Set(node_data.map(item => item.pnode_name))];
+    }
+    const new_data = node_data.filter(e => {
+      return node_names.includes(e.pnode_name);
+    });
+    set_filtered_data2(new_data);
+    // console.log('contains: ');
+    // console.log(node_names.includes(".I.KENT    345 2"));
+    // console.log('node_names: ');
+    // console.log(node_names);
+    // console.log('filtered data: ');
+    // console.log(filtered_data);
+  }
+
   const [filtered_data2, set_filtered_data2] = useState([]);
   const [data_category2, set_data_category2] = useState(0);
   const [scenario2, set_scenario2] = useState(0);
   const [node_names2, set_node_names2] = useState([]);
 
   const handle_data_category_change2 = (selection) => {
-    set_data_category(selection.value);
+    set_data_category2(selection.value);
     filter_data(all_data, data_category, scenario, node_names);
   }
   const handle_scenario_change2 = (selection) => {
-    set_scenario(selection.value);
+    set_scenario2(selection.value);
     filter_data(all_data, data_category, scenario, node_names);
   }
   const handle_node_names_change2 = (selections) => {
-    set_node_names(selections.map(e => e.value));
-    filter_data(all_data, data_category, scenario, node_names);
+    set_node_names2(selections.map(e => e.value));
+    filter_data2(all_data, data_category, scenario, node_names);
   }
 
 
