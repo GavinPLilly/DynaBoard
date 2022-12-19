@@ -4,35 +4,35 @@ import { useState, useEffect } from 'react';
 const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 //takes in data as a parameter
 export default function uc1line ({data}) {
-    let dateAndHour = []; //store date and hour
+    let dates = []; //store date
     //store lmps for each date
     let lmps = [];
-    //add each date and hour to datesAndHours for x axis
+    //add each date to dates for x axis
     data.forEach(data => {
-        if (!dateAndHour.includes(data.date + ' ' + data.hour)) {
-            dateAndHour.push(data.date + ' ' + data.hour);
+        if (!dates.includes(data.date)) {
+            dates.push(data.date);
         }
     });
     //sort dateAndHour and store it in dateAndHour
-    dateAndHour.sort();
+    dates.sort();
     //for each date
-    dateAndHour.forEach(date => {
-        let lmp = [];
+    dates.forEach(date => {
+        let dtc = [];
         //for each node
         data.forEach(data => {
             //if the node has data for that date
-            if (data.date + ' ' + data.hour == date) {
+            if (data.date == date) {
                 //add the lmp to the lmp array
-                lmp.push(data.lmp);
+                dtc.push(data.lmp);
             }
         });
         //add the average of lmp array to the lmps array
-        lmps.push(lmp.reduce((a, b) => a + b, 0) / lmp.length);
+        lmps.push(dtc.reduce((a, b) => a + b, 0) / dtc.length);
     });
     console.log(lmps);
     //create trace for scenario 1 with datesAndHours as x and scenarioLMPs as y values
     let trace1 = {
-        x: dateAndHour,
+        x: dates,
         //store y values scenario 1 for each date and hour as int
         y: lmps,
         type: 'scatter',
@@ -45,7 +45,7 @@ export default function uc1line ({data}) {
     let layout = {
         title: 'LMP over Time',
         xaxis: {
-            title: 'Date and Hour',
+            title: 'Date',
             showgrid: false,
             zeroline: false
         },

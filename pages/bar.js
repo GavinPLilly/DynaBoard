@@ -15,7 +15,7 @@ export default function bar({data}) {
       hours.push(data.hour);
     }
   });
-
+  hours.sort();
   hours.forEach(hour => {
     let sum = 0;
     let count = 0;

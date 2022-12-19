@@ -27,14 +27,16 @@ export default function dualHist ({data}) {
         x: lmps[0],
         type: 'histogram',
         histnorm: 'probability',
-        name: 'Scenario 1',
+        name: 'Scenario ' + scenarios[0],
+        //set number of bins
+        nbinsx: 20
     };
     //create density histogram for second scenario with evenly sized bins between 25 and 35
     let hist2 = {
         x: lmps[1],
         type: 'histogram',
         histnorm: 'probability',
-        name: 'Scenario 2',
+        name: 'Scenario ' + scenarios[1],
     };
 
     //stack hist1 and hist2 on top of each other
@@ -43,20 +45,15 @@ export default function dualHist ({data}) {
         <Plot
             data={plotData}
             layout={{
-                grid: {rows: 2, columns: 1, pattern: 'independent', roworder: 'top to bottom'},
+                grid: {rows: 1, columns: 1, pattern: 'independent', roworder: 'top to bottom'},
                 yaxis1: {title: {text: 'Density'}}, yaxis2: {title: {text: 'Density'}},
                 xaxis: {title: {text: 'LMP'}},width: 600, height: 600, title: 'Density Histograms', font: {
-                family: 'Courier New, monospace',
-                size: 15,
-                color: '#7f7f7f'
-            },
-            //reduce legend size
-            legend: {
-                font: {
-                    size: 10
-                }
-            }
-        }}
+                    family: 'Courier New, monospace',
+                    size: 16,
+                    color: 'black'
+                  }, paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            }}
         />
     );  
 }

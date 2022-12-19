@@ -12,24 +12,26 @@ export default function line ({data}) {
     scenarios.forEach(scenario => {
         //get data for that scenario
         let scenarioData = data.filter(data => data.scenario_id == scenario);
-        //store hours
-        let hours = [];
+        //store data and hours
+        let dateAndHour = [];
         //store lmps for each hour
         let lmps = [];
-        //for each hour
+        //store all date and hour combinations 
         scenarioData.forEach(data => {
-            if (!hours.includes(data.hour)) {
-                hours.push(data.hour);
+            if (!dateAndHour.includes(data.date + ' ' + data.hour)) {
+                dateAndHour.push(data.date + ' ' + data.hour);
             }
         });
+        //sort date and hour combinations
+        dateAndHour.sort();
         //for each hour
-        hours.forEach(hour => {
+        dateAndHour.forEach(step => {
             //store lmps for that hour
             let lmp = [];
             //for each node
             scenarioData.forEach(data => {
                 //if the node has data for that hour
-                if (data.hour == hour) {
+                if (data.date + ' ' + data.hour == step) {
                     //add the lmp to the lmp array
                     lmp.push(data.lmp);
                 }
@@ -42,14 +44,14 @@ export default function line ({data}) {
     });
     //create traces for each hour with scenarioLMPs as x and y values for each hour
     let traces = [];
-    let hours = [];
-    let scenarioData = data.filter(data => data.scenario_id == 1);
+    let dateAndHour = [];
+    let scenarioData = data.filter(data => data.scenario_id == scenarios[0]);
     scenarioData.forEach(data => {
-        if (!hours.includes(data.hour)) {
-            hours.push(data.hour);
+        if (!dateAndHour.includes(data.date + ' ' + data.hour)) {
+            dateAndHour.push(data.date + ' ' + data.hour);
         }
     });
-    for (let i = 0; i < hours.length; i++) {
+    for (let i = 0; i < dateAndHour.length; i++) {
         let trace = {
             x: scenarioLMPs[0][i],
             y: scenarioLMPs[1][i],
@@ -61,7 +63,7 @@ export default function line ({data}) {
     }
     //create frames 
     let frames = [];
-    for (let i = 0; i < hours.length; i++) {
+    for (let i = 0; i < dateAndHour.length; i++) {
         let frame = {
             data: [{
                 x: scenarioLMPs[0][i],
@@ -75,33 +77,34 @@ export default function line ({data}) {
     }
     //create slider steps
     let sliderSteps = [];
-    for (let i = 0; i < hours.length; i++) {
+    dateAndHour.forEach((step, i) => {
         let sliderStep = {
-            label: i + 1,
+            label: step,
             method: 'animate',
             args: [[i], {
                 mode: 'immediate',
-                transition: { duration: 300 },
-                frame: { duration: 300, redraw: false },
+                transition: { duration: 30 },
+                frame: { duration: 30, redraw: false },
             }]
         };
         sliderSteps.push(sliderStep);
     }
+    );
 
     //create layout
     let layout = {
         title: 'Scatterplot',
         xaxis: {
             title: {
-                text: 'Scenario 1'
+                text: 'Scenario ' + scenarios[0]
             },
-            range: [29.8, 30.3]
+            range: [28.5, 31.5]
         },
         yaxis: {
             title: {
-                text: 'Scenario 2'
+                text: 'Scenario ' + scenarios[1]
             },
-            range: [29, 34]
+            range: [28.5, 31.5]
         },
         updatemenus: [{
             x: 0,
@@ -117,11 +120,11 @@ export default function line ({data}) {
                 args: [null, {
                     fromcurrent: true,
                     transition: {
-                        duration: 300,
+                        duration: 30,
                         easing: 'quadratic-in-out'
                     },
                     frame: {
-                        duration: 500,
+                        duration: 50,
                         redraw: false
                     }
                 }],
@@ -143,7 +146,7 @@ export default function line ({data}) {
             pad: { l: 130, t: 55 },
             currentvalue: {
                 visible: true,
-                prefix: 'Hour:',
+                prefix: 'Date and Time:',
                 xanchor: 'right',
                 font: {
                     size: 20,

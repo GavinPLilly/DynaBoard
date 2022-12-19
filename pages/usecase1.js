@@ -91,11 +91,10 @@ export default function use1() {
     if (node_names.length == 0) {
       node_names = [...new Set(node_data.map(item => item.pnode_name))];
     }
-    const new_data = node_data.filter(e => {
+    let new_data = node_data.filter(e => {
       return e.scenario_id == scenario && node_names.includes(e.pnode_name);
     });
     set_filtered_data(new_data);
-    const average = array => array.reduce((a, b) => a + b) / array.length;
     if (filtered_data.length == 0) {
       set_fdat_mean(0)
       set_fdat_median(0)
@@ -110,12 +109,35 @@ export default function use1() {
       // set_fdat_min(filtered_data)
     }
   }
-
   const [all_data, set_all_data] = useState([]);
   const [filtered_data, set_filtered_data] = useState([]);
-  const [data_category, set_data_category] = useState(0);
+  useEffect(() => {
+    fetch('/api/GET/dummy-data')
+      .then(response => response.json())
+      .then(
+        all_data => set_all_data(all_data));
+  }, []);
+
+  let pnode_names = [...new Set(all_data.map(item => item.pnode_name))];
+  const data_categories = [
+    { label: 'LMP', value: 'LMP' },
+    { label: 'MW', value: 'MW' }
+  ];
+
+  let scenario_opts = [...new Set(all_data.map(item => item.scenario_id))];
+  //store scenario options in an array of objects as required by react-select
+  scenario_opts = scenario_opts.sort((a, b) => a - b);
+  const scenario_ids = scenario_opts.map((item) => {
+    return { label: item, value: item };
+  });
+     
+  const [data_category, set_data_category] = useState('LMP');
   const [scenario, set_scenario] = useState(1);
-  const [node_names, set_node_names] = useState([]);
+  const [node_names, set_node_names] = useState(pnode_names);
+  const [fdat_mean, set_fdat_mean] = useState(0);
+  const [fdat_median, set_fdat_median] = useState(0);
+  const [fdat_max, set_fdat_max] = useState(0);
+  const [fdat_min, set_fdat_min] = useState(0);
 
   const handle_data_category_change = (selection) => {
     set_data_category(selection.value);
@@ -129,28 +151,9 @@ export default function use1() {
     set_node_names(selections.map(e => e.value));
     filter_data(all_data, data_category, scenario, node_names);
   }
-  useEffect(() => {
-    fetch('/api/GET/dummy-data')
-      .then(response => response.json())
-      .then(
-        all_data => set_all_data(all_data));
-  }, []);
   // console.log('got data: ');
   // console.log(data);
-  const data_categories = [
-    { label: 'LMP', value: 1 }
-  ];
-  // let scenario_ids = [...new Set(data.map(item => item.scenario_id))];
-  const scenario_ids = [
-    { label: '1', value: 1 },
-    { label: '2', value: 2 },
-    { label: '3', value: 3 }
-  ]
-  let pnode_names = [...new Set(all_data.map(item => item.pnode_name))];
-  const [fdat_mean, set_fdat_mean] = useState(0);
-  const [fdat_median, set_fdat_median] = useState(0);
-  const [fdat_max, set_fdat_max] = useState(0);
-  const [fdat_min, set_fdat_min] = useState(0);
+
   return (
     <div>
       <Head>
@@ -168,6 +171,7 @@ export default function use1() {
             styles={customStyles}
             isMulti={false}
             autosize={false}
+            defaultValue={data_categories[0]}
             onChange={handle_data_category_change}
             options={data_categories}
             theme={(theme) => {
@@ -230,6 +234,7 @@ export default function use1() {
 
             isMulti={false}
             autosize={false}
+            //set default value
 
             onChange={handle_scenario_change}
             options={scenario_ids}
@@ -259,7 +264,7 @@ export default function use1() {
       <div className={styles['step']}>2. View Graphs & Statistics</div>
       <div className={styles['data']}>
         <BarGraph data={filtered_data} />
-        <SingleScenarioLineGraph data={filtered_data} />
+        <SingleScenarioLineGraph data={filtered_data} data_category={'LMP'} />
         <HeatMap />
         <div className={styles['stats']}>
           <h1>Mean: {Math.round(fdat_mean * 100) / 100}</h1>

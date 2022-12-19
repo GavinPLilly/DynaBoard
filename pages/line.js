@@ -11,11 +11,10 @@ export default function line ({data}) {
     let scenarioData = data.filter(data => data.scenario_id == scenario);
     let hours = [];
     let averageLMPs = [];
-    scenarioData.forEach(data => {
-      if (!hours.includes(data.hour)) {
-        hours.push(data.hour);
-      }
-    });
+    for(let i =  1; i <= 24; i++) {
+      hours.push(i);
+    }
+    //hours.sort();
     hours.forEach(hour => {
       let sum = 0;
       let count = 0;
