@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/usecase2.module.css'
 import dynamic from 'next/dynamic';
 import React from 'react';
 import Select from 'react-select';
@@ -106,6 +106,7 @@ export default function use2() {
   const [data_category, set_data_category] = useState(0);
   const [scenario, set_scenario] = useState(0);
   const [node_names, set_node_names] = useState([]);
+
   const handle_data_category_change = (selection) => {
     set_data_category(selection.value);
     filter_data(all_data, data_category, scenario, node_names);
@@ -118,6 +119,27 @@ export default function use2() {
     set_node_names(selections.map(e => e.value));
     filter_data(all_data, data_category, scenario, node_names);
   }
+
+  /* Second Dataset */
+  const [filtered_data2, set_filtered_data2] = useState([]);
+  const [data_category2, set_data_category2] = useState(0);
+  const [scenario2, set_scenario2] = useState(0);
+  const [node_names2, set_node_names2] = useState([]);
+
+  const handle_data_category_change2 = (selection) => {
+    set_data_category(selection.value);
+    filter_data(all_data, data_category, scenario, node_names);
+  }
+  const handle_scenario_change2 = (selection) => {
+    set_scenario(selection.value);
+    filter_data(all_data, data_category, scenario, node_names);
+  }
+  const handle_node_names_change2 = (selections) => {
+    set_node_names(selections.map(e => e.value));
+    filter_data(all_data, data_category, scenario, node_names);
+  }
+
+
   useEffect(() => {
     fetch('http://localhost:3000/api/GET/node-data')
       .then(response => response.json())
@@ -146,8 +168,10 @@ export default function use2() {
       </Head>
       <Header />
       <Title title="Compare" description="[two datasets]" />
-      <div className={styles.row}>
-        <div className={styles.firstcolumn}>
+
+      <div className={styles['step']}>1. Select First Dataset</div>
+      <div className={styles['inputs']}>
+        <div>
           Data Category: <Select     //creates singular dropdown component (insert wherever u want it )
             styles={customStyles}
 
@@ -175,6 +199,8 @@ export default function use2() {
             }
             }
           />
+        </div>
+        <div>
           Node Name: <Select     //creates singular dropdown component (insert wherever u want it )
             styles={customStyles}
 
@@ -205,12 +231,8 @@ export default function use2() {
             }
             }
           />
-          <br />
-          <LineGraph data={filtered_data} />
-          <dualHistogram data={filtered_data} />
-          <MAPEBar data={filtered_data} />
         </div>
-        <div className={styles.firstcolumn}>
+        <div>
           Scenario ID: <Select     //creates singular dropdown component (insert wherever u want it )
             styles={customStyles}
 
@@ -238,11 +260,110 @@ export default function use2() {
             }
             }
           />
-
-          <br />
-
-          <ScatterPlot data={filtered_data} />
         </div>
+      </div>
+
+      <div className={styles['step']}>2. Select Second Dataset</div>
+      <div className={styles['inputs']}>
+        <div>
+          Data Category: <Select     //creates singular dropdown component (insert wherever u want it )
+            styles={customStyles}
+
+            isMulti={false}
+            autosize={false}
+
+            onChange={handle_data_category_change2}
+            options={data_categories}
+            theme={(theme) => {
+              // console.log(theme)
+              return {
+                ...theme,
+                borderRadius: 0,
+                autosize: false,
+                colors: {
+                  ...theme.colors,
+                  text: '#3599B8',
+                  font: '#3599B8',
+                  primary25: '#3599B8',
+                  primary: '#3599B8',
+                  neutral80: 'black',
+                  color: 'black',
+                },
+              }
+            }
+            }
+          />
+        </div>
+        <div>
+          Node Name: <Select     //creates singular dropdown component (insert wherever u want it )
+            styles={customStyles}
+
+            isMulti="true"
+            autosize={false}
+
+            onChange={handle_node_names_change2}
+            options={pnode_names.map(pnode_name => (
+              { label: pnode_name, value: pnode_name }
+            ))
+            }
+            theme={(theme) => {
+              // console.log(theme)
+              return {
+                ...theme,
+                borderRadius: 0,
+                autosize: false,
+                colors: {
+                  ...theme.colors,
+                  text: '#3599B8',
+                  font: '#3599B8',
+                  primary25: '#3599B8',
+                  primary: '#3599B8',
+                  neutral80: 'black',
+                  color: 'black',
+                },
+              }
+            }
+            }
+          />
+        </div>
+        <div>
+          Scenario ID: <Select     //creates singular dropdown component (insert wherever u want it )
+            styles={customStyles}
+
+            isMulti={false}
+            autosize={false}
+
+            onChange={handle_scenario_change2}
+            options={scenario_ids}
+            theme={(theme) => {
+              // console.log(theme)
+              return {
+                ...theme,
+                borderRadius: 0,
+                autosize: false,
+                colors: {
+                  ...theme.colors,
+                  text: '#3599B8',
+                  font: '#3599B8',
+                  primary25: '#3599B8',
+                  primary: '#3599B8',
+                  neutral80: 'black',
+                  color: 'black',
+                },
+              }
+            }
+            }
+          />
+        </div>
+      </div>
+
+
+      <div className={styles['step']}>3. View Graphs & Statistics</div>
+      <div className={styles['data']}>
+        <LineGraph data={filtered_data} />
+        <dualHistogram data={filtered_data} />
+        <MAPEBar data={filtered_data} />
+        <ScatterPlot data={filtered_data} />
       </div>
     </div>
   )
