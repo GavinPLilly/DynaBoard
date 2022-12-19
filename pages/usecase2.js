@@ -12,7 +12,7 @@ import Head from 'next/head';
 const LineGraph = dynamic(import('./line'), { ssr: false })
 const ScatterPlot = dynamic(import('./scatterplot'), { ssr: false })
 const MAPEBar = dynamic(import('./MAPEBar'), { ssr: false })
-const dualHistogram = dynamic(import('./dual-hist'), { ssr: false })
+const DualHistogram = dynamic(import('./dual-hist'), { ssr: false })
 
 const customStyles = { //only declare this once this is just to give the styles to the select component 
   menu: base => ({
@@ -312,7 +312,7 @@ export default function use2() {
       <div className={styles['step']}>3. View Graphs & Statistics</div>
       <div className={styles['data']}>
         <LineGraph data={filtered_data} />
-        <dualHistogram data={filtered_data} />
+        <DualHistogram data={filtered_data} />
         <MAPEBar data={filtered_data} />
         <ScatterPlot data={filtered_data} />
       </div>
