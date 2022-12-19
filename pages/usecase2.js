@@ -4,22 +4,27 @@ import dynamic from 'next/dynamic';
 import React from 'react';
 import Select from 'react-select';
 import { useState, useEffect } from 'react';
-const LineGraph = dynamic(import('./line'), {ssr:false})
-const ScatterPlot = dynamic(import('./scatterplot'), {ssr:false})
-const MAPEBar = dynamic(import('./MAPEBar'), {ssr:false})
-const dualHistogram = dynamic(import('./dual-hist'), {ssr:false})
+import Header from '../Components/Header';
+import Title from '../Components/Title';
+import Head from 'next/head';
+
+
+const LineGraph = dynamic(import('./line'), { ssr: false })
+const ScatterPlot = dynamic(import('./scatterplot'), { ssr: false })
+const MAPEBar = dynamic(import('./MAPEBar'), { ssr: false })
+const dualHistogram = dynamic(import('./dual-hist'), { ssr: false })
 
 const customStyles = { //only declare this once this is just to give the styles to the select component 
   menu: base => ({
     ...base,
     borderRadius: 0,
-    hyphens: 'auto', 
-    marginTop: 0, 
+    hyphens: 'auto',
+    marginTop: 0,
     textAlign: 'left',
   }),
   menuList: base => ({
     ...base,
-    padding: 0, 
+    padding: 0,
     backgroundColor: 'grey',
     maxHeight: '80px',
     overflowY: 'auto',
@@ -42,10 +47,10 @@ const customStyles = { //only declare this once this is just to give the styles 
     ...base,
     overflowY: 'scroll',
 
-      display: "inline-block",
-      width: '50px',
-      overflow: "hidden",
-      height: '30px',
+    display: "inline-block",
+    width: '50px',
+    overflow: "hidden",
+    height: '30px',
   }),
   option: (provided, state) => ({
     ...provided,
@@ -77,7 +82,7 @@ const aquaticCreatures = [ //whatever list ex. list of countries
 
 export default function use2() {
   const filter_data = (node_data, data_category, scenario, node_names) => {
-    if(data_category == 0) {
+    if (data_category == 0) {
       set_filtered_data([]);
       return;
     }
@@ -122,119 +127,123 @@ export default function use2() {
   // console.log('got data: ');
   // console.log(data);
   const data_categories = [
-    { label: 'LMP', value: 1}
+    { label: 'LMP', value: 1 }
   ];
   // let scenario_ids = [...new Set(data.map(item => item.scenario_id))];
   const scenario_ids = [
-	  { label: '1', value: 1 },
-	  { label: '2', value: 2 },
-	  { label: '3', value: 3 }
+    { label: '1', value: 1 },
+    { label: '2', value: 2 },
+    { label: '3', value: 3 }
   ]
   let pnode_names = [...new Set(all_data.map(item => item.pnode_name))];
 
 
   return (
     <div>
-      <div className={styles.topnav}>
-        <h3 className={styles.topnavimg}>
-        <Image src="/favicon.ico" width={40} height={40} /> 
-        </h3>
-          Reliable Electricity. Competitive Prices. Clean-Energy Transition.
-      </div>
-      <div className = {styles.row}>
-        <div className ={styles.firstcolumn}>
-      Data Category: <Select     //creates singular dropdown component (insert wherever u want it )
-      styles={customStyles}
-  
-      isMulti={false}
-      autosize={false}
+      <Head>
+        <title>DynaBoard</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <Header />
+      <Title title="Compare" description="[two datasets]" />
+      <div className={styles.row}>
+        <div className={styles.firstcolumn}>
+          Data Category: <Select     //creates singular dropdown component (insert wherever u want it )
+            styles={customStyles}
 
-        onChange={handle_data_category_change}
-        options={data_categories}
-        theme={(theme) => {
-          // console.log(theme)
-          return {
-          ...theme,
-          borderRadius: 0,
-          autosize:false,
-          colors: {
-          ...theme.colors,
-          text: '#3599B8',
-          font:'#3599B8',
-          primary25: '#3599B8',
-          primary: '#3599B8',
-          neutral80: 'black',
-          color: 'black',
-          },
-        }}
-      }
-      />
-Node Name: <Select     //creates singular dropdown component (insert wherever u want it )
-      styles={customStyles}
-  
-      isMulti="true"
-      autosize={false}
+            isMulti={false}
+            autosize={false}
 
-        onChange={handle_node_names_change}
-        options = {pnode_names.map(pnode_name => (
-            { label: pnode_name, value: pnode_name }
-          ))
-        }
-        theme={(theme) => {
-          // console.log(theme)
-          return {
-          ...theme,
-          borderRadius: 0,
-          autosize:false,
-          colors: {
-          ...theme.colors,
-          text: '#3599B8',
-          font:'#3599B8',
-          primary25: '#3599B8',
-          primary: '#3599B8',
-          neutral80: 'black',
-          color: 'black',
-          },
-        }}
-      }
-      />
-      <br/>
-          <LineGraph data = {filtered_data}/>
-          <dualHistogram data={filtered_data}/>
-          <MAPEBar data = {filtered_data}/>
+            onChange={handle_data_category_change}
+            options={data_categories}
+            theme={(theme) => {
+              // console.log(theme)
+              return {
+                ...theme,
+                borderRadius: 0,
+                autosize: false,
+                colors: {
+                  ...theme.colors,
+                  text: '#3599B8',
+                  font: '#3599B8',
+                  primary25: '#3599B8',
+                  primary: '#3599B8',
+                  neutral80: 'black',
+                  color: 'black',
+                },
+              }
+            }
+            }
+          />
+          Node Name: <Select     //creates singular dropdown component (insert wherever u want it )
+            styles={customStyles}
+
+            isMulti="true"
+            autosize={false}
+
+            onChange={handle_node_names_change}
+            options={pnode_names.map(pnode_name => (
+              { label: pnode_name, value: pnode_name }
+            ))
+            }
+            theme={(theme) => {
+              // console.log(theme)
+              return {
+                ...theme,
+                borderRadius: 0,
+                autosize: false,
+                colors: {
+                  ...theme.colors,
+                  text: '#3599B8',
+                  font: '#3599B8',
+                  primary25: '#3599B8',
+                  primary: '#3599B8',
+                  neutral80: 'black',
+                  color: 'black',
+                },
+              }
+            }
+            }
+          />
+          <br />
+          <LineGraph data={filtered_data} />
+          <dualHistogram data={filtered_data} />
+          <MAPEBar data={filtered_data} />
         </div>
-        <div className ={styles.firstcolumn}>
-       Scenario ID: <Select     //creates singular dropdown component (insert wherever u want it )
-      styles={customStyles}
-  
-      isMulti={false}
-      autosize={false}
+        <div className={styles.firstcolumn}>
+          Scenario ID: <Select     //creates singular dropdown component (insert wherever u want it )
+            styles={customStyles}
 
-        onChange={handle_scenario_change}
-        options={scenario_ids}
-        theme={(theme) => {
-          // console.log(theme)
-          return {
-          ...theme,
-          borderRadius: 0,
-          autosize:false,
-          colors: {
-          ...theme.colors,
-          text: '#3599B8',
-          font:'#3599B8',
-          primary25: '#3599B8',
-          primary: '#3599B8',
-          neutral80: 'black',
-          color: 'black',
-          },
-        }}
-      }
-      />
+            isMulti={false}
+            autosize={false}
 
-            <br/>
+            onChange={handle_scenario_change}
+            options={scenario_ids}
+            theme={(theme) => {
+              // console.log(theme)
+              return {
+                ...theme,
+                borderRadius: 0,
+                autosize: false,
+                colors: {
+                  ...theme.colors,
+                  text: '#3599B8',
+                  font: '#3599B8',
+                  primary25: '#3599B8',
+                  primary: '#3599B8',
+                  neutral80: 'black',
+                  color: 'black',
+                },
+              }
+            }
+            }
+          />
 
-          <ScatterPlot data={filtered_data}/>
+          <br />
+
+          <ScatterPlot data={filtered_data} />
         </div>
       </div>
     </div>
-)}
+  )
+}
