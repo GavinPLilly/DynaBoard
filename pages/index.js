@@ -2,7 +2,7 @@ import React from 'react'
 import styles from '../styles/index.module.css'
 import Image from 'next/image'
 import Head from 'next/head'
-import Header from '../components/Header'
+import Header from '../Components/Header'
 
 function index() {
   return (
