@@ -3,16 +3,17 @@ import styles from '../styles/usecase2.module.css'
 import dynamic from 'next/dynamic';
 import React from 'react';
 import Select from 'react-select';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Header from '../Components/Header';
 import Title from '../Components/Title';
 import Head from 'next/head';
-
-
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 const LineGraph = dynamic(import('./line'), { ssr: false })
 const ScatterPlot = dynamic(import('./scatterplot'), { ssr: false })
-const MAPEBar = dynamic(import('./MAPEBar'), { ssr: false })
-const dualHistogram = dynamic(import('./dual-hist'), { ssr: false })
+const MAPEBar = dynamic(import('./MAPEBar'), { ssr: false });
+
+// const dualHistogram = dynamic(import('./dual-hist'), { ssr: false })
 
 const customStyles = { //only declare this once this is just to give the styles to the select component 
   menu: base => ({
@@ -81,6 +82,9 @@ const aquaticCreatures = [ //whatever list ex. list of countries
 
 
 export default function use2() {
+  const onDateChange = useCallback((date) => {
+    setValue(date);
+  }, []);
   const filter_data = (node_data, data_category, scenario, node_names) => {
     if (data_category == 0) {
       set_filtered_data([]);
@@ -106,6 +110,9 @@ export default function use2() {
   const [data_category, set_data_category] = useState(0);
   const [scenario, set_scenario] = useState(0);
   const [node_names, set_node_names] = useState([]);
+  const [selectedDate,setSelectedDate] = useState(null); //date
+  const [eselectedDate,esetSelectedDate] = useState(null); //date
+
 
   const handle_data_category_change = (selection) => {
     set_data_category(selection.value);
@@ -118,6 +125,10 @@ export default function use2() {
   const handle_node_names_change = (selections) => {
     set_node_names(selections.map(e => e.value));
     filter_data(all_data, data_category, scenario, node_names);
+  }
+  const handle_date_change = (date) => {
+    esetSelectedDate(date);
+    //believe you can obtain these with day = date.Day, date.Month,date.Year
   }
 
   /* Second Dataset */
@@ -153,7 +164,7 @@ export default function use2() {
 
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/GET/node-data')
+    fetch('/api/GET/dummy-data')
       .then(response => response.json())
       .then(
         all_data => set_all_data(all_data));
@@ -170,7 +181,6 @@ export default function use2() {
     { label: '3', value: 3 }
   ]
   let pnode_names = [...new Set(all_data.map(item => item.pnode_name))];
-
 
   return (
     <div>
@@ -212,38 +222,9 @@ export default function use2() {
             }
           />
         </div>
-        <div>
-          Node Name: <Select     //creates singular dropdown component (insert wherever u want it )
-            styles={customStyles}
+        <div>Start Date: <DatePicker styles={customStyles} minDate={new Date('11-11-2022')} maxDate={new Date('11-20-2022')} selected = {selectedDate} onChange={date=>setSelectedDate(date)}/></div> 
+        <div>End Date: <DatePicker styles={customStyles} selected = {eselectedDate} onChange={date=>handle_date_change(date)}/></div>
 
-            isMulti="true"
-            autosize={false}
-
-            onChange={handle_node_names_change}
-            options={pnode_names.map(pnode_name => (
-              { label: pnode_name, value: pnode_name }
-            ))
-            }
-            theme={(theme) => {
-              // console.log(theme)
-              return {
-                ...theme,
-                borderRadius: 0,
-                autosize: false,
-                colors: {
-                  ...theme.colors,
-                  text: '#3599B8',
-                  font: '#3599B8',
-                  primary25: '#3599B8',
-                  primary: '#3599B8',
-                  neutral80: 'black',
-                  color: 'black',
-                },
-              }
-            }
-            }
-          />
-        </div>
         <div>
           Scenario ID: <Select     //creates singular dropdown component (insert wherever u want it )
             styles={customStyles}
@@ -312,7 +293,7 @@ export default function use2() {
       <div className={styles['step']}>3. View Graphs & Statistics</div>
       <div className={styles['data']}>
         <LineGraph data={filtered_data} />
-        <dualHistogram data={filtered_data} />
+        {/* <dualHistogram data={filtered_data} /> */}
         <MAPEBar data={filtered_data} />
         <ScatterPlot data={filtered_data} />
       </div>
