@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/usecase1.module.css'
 import dynamic from 'next/dynamic';
 import React from 'react';
 import Select from 'react-select';
@@ -159,18 +159,15 @@ export default function use1() {
       </Head>
       <Header />
       <Title title="Analyze" description="[one dataset]" />
-      <div className={styles.row}>
 
-        <div className={styles.firstcolumn}>
-
-
-
-          Data Category: <Select     //creates singular dropdown component (insert wherever u want it )
+      <div className={styles['step']}>1. Select Data</div>
+      <div className={styles['inputs']}>
+        <div className={styles['input-datacat']}>
+          Data Category:
+          <Select     //creates singular dropdown component (insert wherever u want it )
             styles={customStyles}
-
             isMulti={false}
             autosize={false}
-
             onChange={handle_data_category_change}
             options={data_categories}
             theme={(theme) => {
@@ -192,8 +189,9 @@ export default function use1() {
             }
             }
           />
-          <br />
-
+        </div>
+        <br />
+        <div className={styles['input-nodename']}>
           Node Name: <Select     //creates singular dropdown component (insert wherever u want it )
             styles={customStyles}
 
@@ -224,13 +222,9 @@ export default function use1() {
             }
             }
           />
-
-
-
-
-          <BarGraph data={filtered_data} />
         </div>
-        <div className={styles.firstcolumn}>
+        <br />
+        <div className={styles['input-senID']}>
           Scenario ID: <Select     //creates singular dropdown component (insert wherever u want it )
             styles={customStyles}
 
@@ -259,17 +253,31 @@ export default function use1() {
             }
           />
           <br />
-          <SingleScenarioLineGraph data={filtered_data} />
         </div>
+      </div>
+
+      <div className={styles['step']}>2. View Graphs & Statistics</div>
+      <div className={styles['data']}>
+        <BarGraph data={filtered_data} />
+        <SingleScenarioLineGraph data={filtered_data} />
+        <HeatMap />
+        <div className={styles['stats']}>
+          <h1>Mean: {Math.round(fdat_mean * 100) / 100}</h1>
+          <h1>Median: {Math.round(fdat_median * 100) / 100}</h1>
+          <h1>Min: {Math.round(fdat_min * 100) / 100}</h1>
+          <h1>Max: {Math.round(fdat_max * 100) / 100}</h1>
+        </div>
+      </div>
+
+
+
+      <div className={styles.row}>
         <div className={styles.column2}>
-          <HeatMap />
+
         </div>
       </div>
       <div>
-        <h1>Mean: {fdat_mean}</h1>
-        <h1>Median: {fdat_median}</h1>
-        <h1>Min: {fdat_min}</h1>
-        <h1>Max: {fdat_max}</h1>
+
       </div>
     </div>
   )
